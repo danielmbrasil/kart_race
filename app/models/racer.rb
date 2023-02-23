@@ -11,8 +11,9 @@ class Racer < ApplicationRecord
   validates :image_url, allow_blank: true, format: { with: URI::DEFAULT_PARSER.make_regexp }
   validate :must_be_over_min_age
 
-  private
+  has_one :placement
 
+  private
 
   def must_be_over_min_age
     return unless born_at.present?

@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe Racer, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:name) }
@@ -37,4 +38,9 @@ RSpec.describe Racer, type: :model do
       end
     end
   end
+
+  describe 'associations' do
+    it { is_expected.to have_one(:placement) }
+  end
 end
+# rubocop:enable Metrics/BlockLength
