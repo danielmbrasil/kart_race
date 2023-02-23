@@ -1,24 +1,21 @@
-# README
+# Kart Race Challenge - CM42
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Run Instructions
 
-Things you may want to cover:
+**Requirements**
 
-* Ruby version
+1. Ruby 3.0.2
+2. Ruby on Rails 7
+3. Docker and Docker Compose
 
-* System dependencies
+```
+ $ docker compose up
+ $ rails server
+```
 
-* Configuration
+Then, access http://localhost:3000.
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Testing
+```
+$ bundle exec rspec
+```
