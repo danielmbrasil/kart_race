@@ -4,8 +4,6 @@ require 'rails_helper'
 
 RSpec.describe Racer, type: :model do
   describe 'validations' do
-    let(:racer) { create :racer }
-
     it { is_expected.to validate_presence_of(:name) }
     it { is_expected.to validate_presence_of(:born_at) }
 
