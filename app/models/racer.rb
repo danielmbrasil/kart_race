@@ -4,6 +4,8 @@ require 'uri'
 
 # Racer
 class Racer < ApplicationRecord
+  MIN_AGE = 18
+
   validates :name, presence: true
   validates :born_at, presence: true
   validates :image_url, allow_blank: true, format: { with: URI::DEFAULT_PARSER.make_regexp }
@@ -11,7 +13,6 @@ class Racer < ApplicationRecord
 
   private
 
-  MIN_AGE = 18
 
   def must_be_over_min_age
     return unless born_at.present?
