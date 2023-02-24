@@ -11,4 +11,6 @@ class Placement < ApplicationRecord
               only_integer: true,
               greater_than: 0
             }
+
+  validates :racer_id, uniqueness: { scope: :race_id }
 end
