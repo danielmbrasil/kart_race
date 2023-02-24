@@ -11,5 +11,6 @@ RSpec.describe Race, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:placements) }
     it { is_expected.to have_many(:racers) }
+    it { is_expected.to belong_to(:tournament) }
   end
 end
