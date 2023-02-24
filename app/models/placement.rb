@@ -9,6 +9,6 @@ class Placement < ApplicationRecord
             uniqueness: { scope: :race_id },
             numericality: {
               only_integer: true,
-              greater_than: 1
+              greater_than: 0
             }
 end

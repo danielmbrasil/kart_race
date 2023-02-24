@@ -8,7 +8,7 @@ RSpec.describe Placement, type: :model do
 
     it { is_expected.to validate_uniqueness_of(:position).scoped_to(:race_id) }
     it { is_expected.to validate_numericality_of(:position).only_integer }
-    it { is_expected.to validate_numericality_of(:position).is_greater_than(1) }
+    it { is_expected.to validate_numericality_of(:position).is_greater_than(0) }
   end
 
   describe 'associations' do
