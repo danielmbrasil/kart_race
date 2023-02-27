@@ -2,4 +2,5 @@
 
 Rails.application.routes.draw do
   resources :racers
+  resources :races, expect: %i[put patch]
 end
