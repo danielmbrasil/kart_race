@@ -25,7 +25,9 @@ RSpec.describe Race, type: :model do
 
         race.validate
 
-        expect(race.errors[:placements]).to include('is invalid')
+        error_message = race.placements.last.errors[:racer_id]
+
+        expect(error_message).to include('has already been taken')
       end
     end
 
@@ -47,7 +49,9 @@ RSpec.describe Race, type: :model do
 
         race.validate
 
-        expect(race.errors[:placements]).to include('is invalid')
+        error_message = race.placements.last.errors[:position]
+
+        expect(error_message).to include('has already been taken')
       end
     end
   end
