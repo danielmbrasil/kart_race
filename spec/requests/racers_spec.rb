@@ -98,5 +98,85 @@ RSpec.describe 'Racers', type: :request do
       end
     end
   end
+
+  describe 'POST #create' do
+    context 'when params are valid' do
+      let(:params) do
+        {
+          name: 'Rubens',
+          born_at: '20/02/2000',
+          image_url: 'https://example.com/image.png'
+        }
+      end
+
+      it 'returns HTTP status OK' do
+        post '/racers', headers: default_header, params: params
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns created racer' do
+        post '/racers', headers: default_header, params: params
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body).to include(
+          {
+            name: 'Rubens',
+            born_at: '20/02/2000',
+            image_url: 'https://example.com/image.png'
+          }.with_indifferent_access
+        )
+      end
+    end
+
+    context 'when params are invalid' do
+      context 'when racer is under min age' do
+        let(:params) do
+          {
+            name: 'Rubens',
+            born_at: '20/02/2010'
+          }
+        end
+
+        it 'returns HTTP status UNPROCESSABLE ENTITY' do
+          post '/racers', headers: default_header, params: params
+
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it 'returns an array with error messages' do
+          post '/racers', headers: default_header, params: params
+
+          response_body = JSON.parse(response.body)
+
+          expect(response_body['errors']).to include("Born at must be at least #{Racer::MIN_AGE} years old")
+        end
+      end
+
+      context 'when name is not present' do
+        let(:params) do
+          {
+            born_at: '20/02/2000',
+            image_url: 'https://example.com/image.png'
+          }
+        end
+
+        it 'returns HTTP status UNPROCESSABLE ENTITY' do
+          post '/racers', headers: default_header, params: params
+
+          expect(response).to have_http_status(:unprocessable_entity)
+        end
+
+        it 'returns an array with error messages' do
+          post '/racers', headers: default_header, params: params
+
+          response_body = JSON.parse(response.body)
+
+          expect(response_body['errors']).to include("Name can't be blank")
+        end
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

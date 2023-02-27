@@ -10,9 +10,23 @@ class RacersController < ApplicationController
 
   def show; end
 
+  def create
+    @racer = Racer.new(racer_params)
+
+    if @racer.save
+      render :show, status: :ok
+    else
+      render json: { errors: @racer.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   private
 
   def find_racer
     @racer = Racer.find(params[:id])
+  end
+
+  def racer_params
+    params.permit(:name, :born_at, :image_url)
   end
 end
