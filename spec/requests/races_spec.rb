@@ -97,7 +97,7 @@ RSpec.describe 'Races', type: :request do
     end
   end
 
-  describe 'GET /show/:id' do
+  describe 'GET /races/:id' do
     context 'when race is not found' do
       it 'returns HTTP status NOT FOUND' do
         get '/races/:id', headers: default_header
@@ -172,6 +172,82 @@ RSpec.describe 'Races', type: :request do
         response_body = JSON.parse(response.body)
 
         expect(response_body).to eq(expected_response_body)
+      end
+    end
+  end
+
+  describe 'POST /races' do
+    context 'when params are valid' do
+      let(:tournament) { create(:tournament) }
+      let(:racer) { create(:racer) }
+
+      let(:params) do
+        {
+          tournament_id: tournament.id,
+          place: 'Interlagos',
+          date: '2022-12-10',
+          placements_attributes: [
+            {
+              'racer_id': racer.id,
+              'position': 1
+            }
+          ]
+        }
+      end
+
+      it 'returns HTTP status OK' do
+        post '/races', headers: default_header, params: params
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns created race object' do
+        post '/races', headers: default_header, params: params
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body).to include(
+          {
+            tournament_id: tournament.id,
+            place: 'Interlagos',
+            date: '2022/12/10',
+            placements: [
+              hash_including({ racer_id: racer.id, position: 1 }.with_indifferent_access)
+            ]
+          }.with_indifferent_access
+        )
+      end
+    end
+
+    context 'when params are invalid' do
+      let(:tournament) { create(:tournament) }
+      let(:racer) { create(:racer) }
+
+      let(:params) do
+        {
+          tournament_id: tournament.id,
+          date: '2022-12-10',
+          placements_attributes: [
+            {
+              'racer_id': racer.id,
+              'position': 1
+            }
+          ]
+        }
+      end
+
+      it 'returns HTTP status UNPROCESSABLE ENTITY' do
+        post '/races', headers: default_header, params: params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns an array with error messages' do
+        post '/races', headers: default_header, params: params
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body['errors']).to include("Place can't be blank")
       end
     end
   end
