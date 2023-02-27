@@ -242,5 +242,33 @@ RSpec.describe 'Racers', type: :request do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'when racer exists' do
+      let(:racer) { create(:racer) }
+
+      it 'returns HTTP status OK' do
+        delete "/racers/#{racer.id}", headers: default_header
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns success message' do
+        delete "/racers/#{racer.id}", headers: default_header
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body).to include({ 'message': 'Sucess' }.with_indifferent_access)
+      end
+    end
+
+    context 'when racer does not exist' do
+      it 'returns HTTP status NOT FOUND' do
+        delete '/racers/:id', headers: default_header
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

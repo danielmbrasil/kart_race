@@ -2,7 +2,7 @@
 
 # RacersController
 class RacersController < ApplicationController
-  before_action :find_racer, only: %i[show update]
+  before_action :find_racer, only: %i[show update destroy]
 
   def index
     @racers = Racer.all
@@ -28,6 +28,11 @@ class RacersController < ApplicationController
     else
       render json: { errors: @racer.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @racer.destroy
+    render json: { message: 'Sucess' }, status: :ok
   end
 
   private
