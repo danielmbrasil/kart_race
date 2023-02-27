@@ -178,5 +178,69 @@ RSpec.describe 'Racers', type: :request do
       end
     end
   end
+
+  describe 'PATCH #update' do
+    context 'when racer exists and params are valid' do
+      let(:racer) { create(:racer) }
+      let(:params) do
+        {
+          name: 'New name',
+          born_at: '20/01/1999'
+        }
+      end
+
+      it 'returns HTTP status OK' do
+        patch "/racers/#{racer.id}", headers: default_header, params: params
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'returns updated racer object' do
+        patch "/racers/#{racer.id}", headers: default_header, params: params
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body).to include(
+          {
+            name: 'New name',
+            born_at: '20/01/1999'
+          }.with_indifferent_access
+        )
+      end
+    end
+
+    context 'when racer does not exist' do
+      it 'returns HTTP status NOT FOUND' do
+        patch '/racers/:id', headers: default_header
+
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context 'when params are invalid' do
+      let(:racer) { create(:racer) }
+      let(:params) do
+        {
+          name: 'New name',
+          born_at: '20/01/1999',
+          image_url: 'invalid.url'
+        }
+      end
+
+      it 'returns HTTP status UNPROCESSABLE ENTITY' do
+        patch "/racers/#{racer.id}", headers: default_header, params: params
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'returns an array with error messages' do
+        patch "/racers/#{racer.id}", headers: default_header, params: params
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body['errors']).to include('Image url is invalid')
+      end
+    end
+  end
 end
 # rubocop:enable Metrics/BlockLength

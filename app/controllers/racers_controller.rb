@@ -2,7 +2,7 @@
 
 # RacersController
 class RacersController < ApplicationController
-  before_action :find_racer, only: :show
+  before_action :find_racer, only: %i[show update]
 
   def index
     @racers = Racer.all
@@ -12,6 +12,16 @@ class RacersController < ApplicationController
 
   def create
     @racer = Racer.new(racer_params)
+
+    if @racer.save
+      render :show, status: :ok
+    else
+      render json: { errors: @racer.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
+  def update
+    @racer.update(racer_params)
 
     if @racer.save
       render :show, status: :ok
