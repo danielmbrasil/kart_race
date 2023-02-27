@@ -2,7 +2,7 @@
 
 # RacesController
 class RacesController < ApplicationController
-  before_action :find_race, only: :show
+  before_action :find_race, only: %i[show destroy]
 
   def index
     @races = Race.all
@@ -18,6 +18,11 @@ class RacesController < ApplicationController
     else
       render json: { errors: @race.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @race.destroy
+    render json: { message: 'Success' }, status: :ok
   end
 
   private
