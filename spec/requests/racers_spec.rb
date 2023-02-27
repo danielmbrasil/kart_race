@@ -6,7 +6,7 @@ require 'rails_helper'
 RSpec.describe 'Racers', type: :request do
   let(:default_header) { { 'Accept': 'application/json' } }
 
-  describe 'GET #index' do
+  describe 'GET /racers' do
     context 'when there is no racer' do
       it 'returns HTTP status OK' do
         get '/racers', headers: default_header
@@ -53,7 +53,7 @@ RSpec.describe 'Racers', type: :request do
     end
   end
 
-  describe 'GET #show' do
+  describe 'GET /racers/:id' do
     context 'when racer exist' do
       let(:racer) { create(:racer) }
 
@@ -99,7 +99,7 @@ RSpec.describe 'Racers', type: :request do
     end
   end
 
-  describe 'POST #create' do
+  describe 'POST /racers' do
     context 'when params are valid' do
       let(:params) do
         {
@@ -179,7 +179,7 @@ RSpec.describe 'Racers', type: :request do
     end
   end
 
-  describe 'PATCH #update' do
+  describe 'PATCH /racers/:id' do
     context 'when racer exists and params are valid' do
       let(:racer) { create(:racer) }
       let(:params) do
@@ -243,7 +243,7 @@ RSpec.describe 'Racers', type: :request do
     end
   end
 
-  describe 'DELETE #destroy' do
+  describe 'DELETE /racers/:id' do
     context 'when racer exists' do
       let(:racer) { create(:racer) }
 
