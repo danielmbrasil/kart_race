@@ -21,7 +21,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_02_24_194010) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["position", "race_id"], name: "index_placements_on_position_and_race_id", unique: true
-    t.index ["position", "racer_id"], name: "index_placements_on_position_and_racer_id", unique: true
     t.index ["race_id"], name: "index_placements_on_race_id"
     t.index ["racer_id", "race_id"], name: "index_placements_on_racer_id_and_race_id", unique: true
     t.index ["racer_id"], name: "index_placements_on_racer_id"
