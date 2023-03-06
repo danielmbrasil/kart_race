@@ -42,6 +42,6 @@ class RacersController < ApplicationController
   end
 
   def racer_params
-    params.permit(:name, :born_at, :image_url)
+    params.require(:racer).permit(:id, :name, :born_at, :image_url)
   end
 end
