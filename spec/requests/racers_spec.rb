@@ -2,20 +2,20 @@
 
 require 'rails_helper'
 
-# rubocop:disable Metrics/BlockLength
+# rubocop:disable Metrics/BlockLength, Style/HashSyntax
 RSpec.describe 'Racers', type: :request do
-  let(:default_header) { { 'Accept': 'application/json' } }
+  let(:headers) { { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
 
   describe 'GET /racers' do
     context 'when there is no racer' do
       it 'returns HTTP status OK' do
-        get '/racers', headers: default_header
+        get '/racers', headers: headers
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns an empty array' do
-        get '/racers', headers: default_header
+        get '/racers', headers: headers
 
         response_body = JSON.parse(response.body)
 
@@ -38,13 +38,13 @@ RSpec.describe 'Racers', type: :request do
       end
 
       it 'returns HTTP status OK' do
-        get '/racers', headers: default_header
+        get '/racers', headers: headers
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns an array with racers' do
-        get '/racers', headers: default_header
+        get '/racers', headers: headers
 
         response_body = JSON.parse(response.body)
 
@@ -67,13 +67,13 @@ RSpec.describe 'Racers', type: :request do
       end
 
       it 'returns HTTP status OK' do
-        get "/racers/#{racer.id}", headers: default_header
+        get "/racers/#{racer.id}", headers: headers
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns racer objet correctly' do
-        get "/racers/#{racer.id}", headers: default_header
+        get "/racers/#{racer.id}", headers: headers
 
         response_body = JSON.parse(response.body)
 
@@ -83,7 +83,7 @@ RSpec.describe 'Racers', type: :request do
 
     context 'when racer is not found' do
       it 'returns HTTP status NOT FOUND' do
-        get '/racers/:id', headers: default_header
+        get '/racers/:id', headers: headers
 
         expect(response).to have_http_status(:not_found)
       end
@@ -91,7 +91,7 @@ RSpec.describe 'Racers', type: :request do
       it 'returns error message in response body' do
         expected_response_body = { error: 'Not found' }.with_indifferent_access
 
-        get '/racers/:id', headers: default_header
+        get '/racers/:id', headers: headers
         response_body = JSON.parse(response.body)
 
         expect(response_body).to eq(expected_response_body)
@@ -110,13 +110,13 @@ RSpec.describe 'Racers', type: :request do
       end
 
       it 'returns HTTP status OK' do
-        post '/racers', headers: default_header, params: params
+        post '/racers', headers:, params: params.to_json
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns created racer' do
-        post '/racers', headers: default_header, params: params
+        post '/racers', headers:, params: params.to_json
 
         response_body = JSON.parse(response.body)
 
@@ -140,13 +140,13 @@ RSpec.describe 'Racers', type: :request do
         end
 
         it 'returns HTTP status UNPROCESSABLE ENTITY' do
-          post '/racers', headers: default_header, params: params
+          post '/racers', headers:, params: params.to_json
 
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it 'returns an array with error messages' do
-          post '/racers', headers: default_header, params: params
+          post '/racers', headers:, params: params.to_json
 
           response_body = JSON.parse(response.body)
 
@@ -163,13 +163,13 @@ RSpec.describe 'Racers', type: :request do
         end
 
         it 'returns HTTP status UNPROCESSABLE ENTITY' do
-          post '/racers', headers: default_header, params: params
+          post '/racers', headers:, params: params.to_json
 
           expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it 'returns an array with error messages' do
-          post '/racers', headers: default_header, params: params
+          post '/racers', headers:, params: params.to_json
 
           response_body = JSON.parse(response.body)
 
@@ -190,13 +190,13 @@ RSpec.describe 'Racers', type: :request do
       end
 
       it 'returns HTTP status OK' do
-        patch "/racers/#{racer.id}", headers: default_header, params: params
+        patch "/racers/#{racer.id}", headers:, params: params.to_json
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns updated racer object' do
-        patch "/racers/#{racer.id}", headers: default_header, params: params
+        patch "/racers/#{racer.id}", headers:, params: params.to_json
 
         response_body = JSON.parse(response.body)
 
@@ -211,7 +211,7 @@ RSpec.describe 'Racers', type: :request do
 
     context 'when racer does not exist' do
       it 'returns HTTP status NOT FOUND' do
-        patch '/racers/:id', headers: default_header
+        patch '/racers/:id', headers: headers
 
         expect(response).to have_http_status(:not_found)
       end
@@ -228,13 +228,13 @@ RSpec.describe 'Racers', type: :request do
       end
 
       it 'returns HTTP status UNPROCESSABLE ENTITY' do
-        patch "/racers/#{racer.id}", headers: default_header, params: params
+        patch "/racers/#{racer.id}", headers:, params: params.to_json
 
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
       it 'returns an array with error messages' do
-        patch "/racers/#{racer.id}", headers: default_header, params: params
+        patch "/racers/#{racer.id}", headers:, params: params.to_json
 
         response_body = JSON.parse(response.body)
 
@@ -248,13 +248,13 @@ RSpec.describe 'Racers', type: :request do
       let(:racer) { create(:racer) }
 
       it 'returns HTTP status OK' do
-        delete "/racers/#{racer.id}", headers: default_header
+        delete "/racers/#{racer.id}", headers: headers
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns success message' do
-        delete "/racers/#{racer.id}", headers: default_header
+        delete "/racers/#{racer.id}", headers: headers
 
         response_body = JSON.parse(response.body)
 
@@ -264,11 +264,11 @@ RSpec.describe 'Racers', type: :request do
 
     context 'when racer does not exist' do
       it 'returns HTTP status NOT FOUND' do
-        delete '/racers/:id', headers: default_header
+        delete '/racers/:id', headers: headers
 
         expect(response).to have_http_status(:not_found)
       end
     end
   end
 end
-# rubocop:enable Metrics/BlockLength
+# rubocop:enable Metrics/BlockLength, Style/HashSyntax
