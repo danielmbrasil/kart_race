@@ -4,18 +4,18 @@ require 'rails_helper'
 
 # rubocop:disable Metrics/BlockLength
 RSpec.describe 'Tournaments', type: :request do
-  let(:default_header) { { 'Accept': 'application/json' } }
+  let(:headers) { { 'Accept': 'application/json', 'Content-Type': 'application/json' } }
 
   describe 'GET /tournaments' do
     context 'when there are no tournament' do
       it 'returns HTTP status OK' do
-        get '/tournaments', headers: default_header
+        get('/tournaments', headers:)
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns an empty array' do
-        get '/tournaments', headers: default_header
+        get('/tournaments', headers:)
 
         response_body = JSON.parse(response.body)
 
@@ -44,17 +44,53 @@ RSpec.describe 'Tournaments', type: :request do
       end
 
       it 'returns HTTP status OK' do
-        get '/tournaments', headers: default_header
+        get('/tournaments', headers:)
 
         expect(response).to have_http_status(:ok)
       end
 
       it 'returns an array with tournaments' do
-        get '/tournaments', headers: default_header
+        get('/tournaments', headers:)
 
         response_body = JSON.parse(response.body)
 
         expect(response_body).to eq(expected_response_body)
+      end
+    end
+  end
+
+  describe 'POST /tournaments' do
+    context 'when params are valid' do
+      let(:params) { { 'name' => 'Copa Pistão' }.to_json }
+
+      it 'returns HTTP status OK' do
+        post('/tournaments', headers:, params:)
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it 'responds with created tournament' do
+        post('/tournaments', headers:, params:)
+
+        expect(JSON.parse(response.body)).to include({ 'name' => 'Copa Pistão' })
+      end
+    end
+
+    context 'when params are invalid' do
+      let(:params) { { 'name' => '' }.to_json }
+
+      it 'returns HTTP status UNPROCESSABLE ENTITY' do
+        post('/tournaments', headers:, params:)
+
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
+
+      it 'responds with validation error messages' do
+        post('/tournaments', headers:, params:)
+
+        response_body = JSON.parse(response.body)
+
+        expect(response_body['errors']).to include("Name can't be blank")
       end
     end
   end
