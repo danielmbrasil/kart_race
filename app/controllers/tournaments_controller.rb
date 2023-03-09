@@ -15,6 +15,6 @@ class TournamentsController < ApplicationController
   private
 
   def find_tournament
-    @tournament = Tournament.find(params[:id])
+    @tournament = Tournament.includes(:races).find(params[:id])
   end
 end
