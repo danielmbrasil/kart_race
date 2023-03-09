@@ -9,7 +9,7 @@ class TournamentsController < ApplicationController
   end
 
   def show
-    @racers = Racer.from_tournament(params[:id])
+    @racers = RankRacersByPointsQuery.call(params[:id])
   end
 
   private

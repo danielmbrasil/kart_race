@@ -14,8 +14,6 @@ class Racer < ApplicationRecord
   has_many :placements
   has_many :races, through: :placements
 
-  scope :from_tournament, ->(tournamet_id) { joins(races: :tournament).where(tournament: { id: tournamet_id }) }
-
   private
 
   def must_be_over_min_age

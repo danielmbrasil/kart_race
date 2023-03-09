@@ -13,4 +13,8 @@ class Placement < ApplicationRecord
             }
 
   validates :racer_id, uniqueness: { scope: :race_id }
+
+  FIRST_PLACE_POINTS = 5
+  SECOND_PLACE_POINTS = 3
+  THIRD_PLACE_POINTS = 2
 end

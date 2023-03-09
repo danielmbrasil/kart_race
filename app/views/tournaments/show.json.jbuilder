@@ -8,6 +8,7 @@ json.racers @racers do |racer|
   json.name racer.name
   json.born_at racer.born_at
   json.image_url racer.image_url
+  json.points racer.points
 end
 
 json.races @tournament.races do |race|
